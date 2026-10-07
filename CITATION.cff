@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper and the two datasets."
+title: "Rotor temperature soft sensing after estimator resets: code"
+version: 1.0.0
+license: MIT
+authors:
+  - family-names: Ashoori
+    given-names: Aryan
+    orcid: "https://orcid.org/0009-0001-2226-3894"
+preferred-citation:
+  type: article
+  title: "Rotor temperature soft sensing after estimator resets using thermal-model simulations and calibrated uncertainty"
+  authors:
+    - family-names: Ashoori
+      given-names: Aryan
+      orcid: "https://orcid.org/0009-0001-2226-3894"
+  status: submitted
+  year: 2026

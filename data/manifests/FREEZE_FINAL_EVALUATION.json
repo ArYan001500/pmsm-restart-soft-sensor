@@ -1,0 +1,26 @@
+{
+ "locked_utc": "2026-10-06T20:12:39.281211Z",
+ "recipe": "v2",
+ "cv_runs": [
+  "20261006T201214Z_cv5_ablation_v2_paderborn_ec2e6fab",
+  "20261006T195103Z_cv5_ablation_v2_induction_5fd6ecea"
+ ],
+ "test_units": {
+  "paderborn": [
+   60,
+   62,
+   74
+  ],
+  "induction": "l%5==0"
+ },
+ "rule": "single run per dataset; no setting changes after this file exists",
+ "sha256": {
+  "reports/paper_prep/FREEZE_RECIPE_v1.md": "bee03d47533cfc660a44c91e7f71e72164cc848dc6fc5efce8a59006b4e64843",
+  "scripts/run_locked_test.py": "2ed668311bfd7f1284fc6d424c77827b718fb7d0618bc112bf9f00c5a5656159",
+  "scripts/run_cv5_ablation_v2.py": "a648647e602a6f15f8eeee380f82315f3a58b5147038387f1c0ffd0ffcf6b86e",
+  "src/pmsm_softsense/reset_tools.py": "9db4775e03fbf24854a8656682ab4f260947c93150ae87bbb23604f1bcc93436",
+  "src/pmsm_softsense/lptn_fit.py": "e57e596670afeff4edc86922d25cbadff3f634d512fcf64da3f12e7fa84069ad",
+  "src/pmsm_softsense/lptn_real.py": "d3258eacf9524f16ef7fc9aca33fdbe52b412f768c3a74bf4589907767ae2d6d",
+  "data/manifests/profile_splits_literature_v2.json": "505d488aa5d815fe643556531c4f22805d94b2d42baff15091414f5ca8606136"
+ }
+}

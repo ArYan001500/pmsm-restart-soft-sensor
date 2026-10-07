@@ -1,0 +1,13 @@
+data/raw/
+data/processed/
+data/download/
+data/Second Dataset/
+outputs/runs/
+outputs/figures/
+outputs/tables/
+outputs/analysis/
+outputs/diagnostics/20261006_induction_audit/*.csv
+outputs/diagnostics/20261006_induction_audit/*.json
+__pycache__/
+*.pyc
+.pytest_cache/
