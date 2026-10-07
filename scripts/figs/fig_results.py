@@ -36,7 +36,7 @@ for j, (ds, ev, sc, title) in enumerate(COLS):
     axs[1, j].text(30.5, 0.893, "target 0.90", fontsize=6, color=C["muted"], ha="right", va="top")
     axs[2, j].set_xlabel("Time after event [min]"); axs[2, j].set_xticks([0, 5, 10, 20, 30])
     axs[0, j].set_ylim(bottom=0); axs[2, j].set_ylim(bottom=0)
-axs[0, 0].set_ylabel("Median |error| [K]\n(CBP IQR shaded)"); axs[1, 0].set_ylabel("Coverage of\n90 % band"); axs[2, 0].set_ylabel("Band half-width [K]")
+axs[0, 0].set_ylabel("Median |error| [K]\n(CBP IQR shaded)"); axs[1, 0].set_ylabel("Coverage of\n±1.645σ band"); axs[2, 0].set_ylabel("Band half-width [K]")
 h, l = axs[0, 0].get_legend_handles_labels()
 from matplotlib.lines import Line2D
 h += [Line2D([], [], ls="none", marker="o", mfc="none", mec=C["ink"], ms=5, mew=0.9)]; l += ["Locked test median"]

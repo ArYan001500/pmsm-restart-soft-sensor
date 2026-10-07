@@ -71,6 +71,7 @@ the newest matching run.
 | Table 6 warm-start rows, Fig. 4c | `scripts/run_ewma_baseline.py ... --pad current` | `outputs/runs/*_ewma_baseline_*_warm_*` |
 | Table 9 and the warm-start comparison | `scripts/analysis/analysis_strict_split.py` | `outputs/analysis_strict_split/` |
 | Table 9 second row (one calibration event per profile) | `scripts/run_cv5_groupconf.py --dataset paderborn` | `outputs/runs/*_cv5_groupconf_*` |
+| Induction-motor inputs available at each sample (Section 4.1) | `scripts/run_cv5_causal_im.py --dataset induction`, then `scripts/analysis/analysis_causal_inputs.py` | `outputs/runs/*_cv5_causal_induction_*`, `outputs/analysis_causal_inputs/` |
 | Calibrated naive band (Sections 5.2, 5.7) | `scripts/analysis/analysis_naive_band.py` | `outputs/analysis_naive_band/` |
 | Fig. 5 (twin snapshots) | `scripts/run_matched_pairs_identifiability.py` | `outputs/runs/*_matched_pairs_*` |
 | Fig. 6 (derating, incl. the naive filter with a calibrated band) | `scripts/run_derating_sim.py` | `outputs/runs/*_derating_sim_*` |
@@ -102,8 +103,8 @@ which `reproduce_all.py` creates with `scripts/prepare_induction_metadata.py`.
   keeps only as ablation A8.
   To keep these hashes valid, the comments of the frozen files are unchanged; in them, the internal label
   `UI-009` denotes the novelty-scaled conformal calibration described in the paper.
-* `scripts/run_shift_test.py`, `scripts/run_ewma_baseline.py`, `scripts/run_cv5_strictsplit.py`, `scripts/run_shift_strict.py`, `scripts/run_cv5_groupconf.py`
-  and `scripts/analysis/analysis_{shift_ewma,strict_split,naive_band}.py` were added after the locked test. The shift test reuses the code path of `run_cv5_ablation_v2.py` on development data only; the
+* `scripts/run_shift_test.py`, `scripts/run_ewma_baseline.py`, `scripts/run_cv5_strictsplit.py`, `scripts/run_shift_strict.py`, `scripts/run_cv5_groupconf.py`, `scripts/run_cv5_causal_im.py`
+  and `scripts/analysis/analysis_{shift_ewma,strict_split,naive_band,causal_inputs}.py` were added after the locked test. The shift test reuses the code path of `run_cv5_ablation_v2.py` on development data only; the
   EWMA baseline is a separate estimator evaluated on the same events. Neither changes the frozen recipe.
 
 ## Repository layout

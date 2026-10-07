@@ -9,14 +9,14 @@ sys.path.insert(0, str(Path(__file__).parent)); from figstyle import *
 ROOT = Path(__file__).resolve().parents[2]; OUT = FIGDIR
 Z = np.load(OUT / "fig1_example_reset_traces.npz")
 setup()
-fig = plt.figure(figsize=(130 * MM, 50 * MM))
-bg = fig.add_axes([0, 0, 1, 1]); bg.set_xlim(0, 130); bg.set_ylim(0, 50); bg.axis("off")
+fig = plt.figure(figsize=(130 * MM, 52 * MM))
+bg = fig.add_axes([0, 0, 1, 1]); bg.set_xlim(0, 130); bg.set_ylim(-1, 51); bg.axis("off")
 BLUE, ORNG, INK, MUT, RED = C["CBP"], C["naive_KF"], C["ink"], C["muted"], "#C0392B"
 def card(x, w, fc): bg.add_patch(FancyBboxPatch((x, 2), w, 46, boxstyle="round,pad=0,rounding_size=2", fc=fc, ec="none", zorder=0))
 card(1, 36, "#F6F6F4"); card(40, 44, "#EEF4FA"); card(87, 42, "#F1F8F4")
 # 1 problem
 bg.text(19, 45, "Estimator reset", ha="center", fontsize=8, fontweight="bold", color=INK)
-bg.text(19, 40.8, "estimator memory erased", ha="center", fontsize=6.3, color=MUT)
+bg.text(19, 40.8, "memory erased (emulated)", ha="center", fontsize=6.3, color=MUT)
 cx, cy = 19, 24
 bg.add_patch(Circle((cx, cy), 11, fc="#D9D9D6", ec="#7A7A7A", lw=0.6))
 bg.add_patch(Circle((cx, cy), 7.8, fc="#F6F6F4", ec="#7A7A7A", lw=0.5))
@@ -37,16 +37,17 @@ bg.text(62, 4.6, "2 machines, one locked test each", ha="center", fontsize=6.0, 
 for x0 in (37.3, 84.3): bg.add_patch(FancyArrowPatch((x0, 25), (x0 + 2.4, 25), arrowstyle="-|>", mutation_scale=9, color=INK, lw=1.2))
 # 3 result
 bg.text(108, 45, "Faster recovery", ha="center", fontsize=8, fontweight="bold", color=C["oracle"])
-bg.text(108, 40.8, "band calibrated at the reset", ha="center", fontsize=6.3, color=MUT)
+bg.text(108, 40.8, "initial band calibrated offline", ha="center", fontsize=6.3, color=MUT)
 ax = fig.add_axes([0.705, 0.36, 0.27, 0.43])
 ax.fill_between(Z["tm"], Z["cbp"] - 1.645 * Z["sd"], Z["cbp"] + 1.645 * Z["sd"], color=BLUE, alpha=0.18, lw=0)
 ax.plot(Z["tm"], Z["pm"], color=INK, lw=1.6); ax.plot(Z["tm"], Z["naive"], color=ORNG, lw=1.2, ls="--"); ax.plot(Z["tm"], Z["cbp"], color=BLUE, lw=1.4)
 ax.set_xlim(0, 30); ax.set_ylim(35, 105); ax.set_xticks([0, 15, 30]); ax.set_yticks([40, 70, 100]); ax.tick_params(labelsize=5.5, pad=1)
 ax.set_xlabel("min after reset", fontsize=5.8, labelpad=0); ax.set_facecolor("white")
+ax.text(3, 100, "hardest validation reset", color=MUT, fontsize=5.6, ha="left", va="top", style="italic")
 ax.text(29, 100, "naive", color=ORNG, fontsize=5.8, ha="right", va="top", fontweight="bold")
 ax.text(29, 44, "proposed + band", color=BLUE, fontsize=5.8, ha="right", fontweight="bold")
 ax.text(16, 81, "measured", color=INK, fontsize=5.8, ha="left", fontweight="bold")
 bg.text(108, 9.6, "median PMSM error at reset 11.9 → 5.1 K", ha="center", fontsize=5.8, color=INK, fontweight="bold")
-bg.text(108, 3.6, "locked tests: 26/32 PMSM resets (3 profiles),\n54/55 induction-motor starts covered", ha="center", fontsize=5.7, color=INK)
+bg.text(108, 3.6, "locked PMSM test: 26/32 covered (3 profiles);\nstrict split: 91 % of CV resets covered", ha="center", fontsize=5.7, color=INK)
 fig.savefig(OUT / "graphical_abstract.pdf"); fig.savefig(OUT / "graphical_abstract.png", dpi=300); fig.savefig(OUT / "graphical_abstract.tiff", dpi=300)
 print("ok")

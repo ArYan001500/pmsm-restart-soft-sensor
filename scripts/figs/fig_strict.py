@@ -53,7 +53,7 @@ for k, _, _ in ROWS:
     m = S[k]["methods"]; h3, hc = m["A3_plainconf"]["hw0_med"], m["CBP"]["hw0_med"]
     axb.plot([h3, hc], [y[k]] * 2, color="#9AA5B1", lw=1.4, zorder=2)
     axb.plot(h3, y[k], MK["A3_plainconf"], color=A3, ms=4.6, mec="white", mew=0.5, zorder=4); axb.plot(hc, y[k], "o", color=CB, ms=4.6, mec="white", mew=0.5, zorder=4)
-axb.axvline(49.35, color=C["naive_KF"], lw=0.9, ls=":", zorder=1); axb.text(48.5, y[ROWS[-1][0]] - 0.55, "naive\nfilter", ha="right", va="bottom", fontsize=6.2, color=C["naive_KF"])
+axb.axvline(49.35, color=C["naive_KF"], lw=0.9, ls=":", zorder=1); axb.text(48.5, y[ROWS[-1][0]] - 0.15, "naive filter,\ndefault band", ha="right", va="bottom", fontsize=6.2, color=C["naive_KF"])
 axb.set_xlim(0, 52); axb.set_xticks([0, 10, 20, 30, 40, 50]); axb.set_xlabel("Band half-width at the event [K]")
 plt.setp(axb.get_yticklabels(), visible=False); axb.tick_params(axis="y", length=0)
 panel(axb, "(b)", x=-0.02, y=1.10)

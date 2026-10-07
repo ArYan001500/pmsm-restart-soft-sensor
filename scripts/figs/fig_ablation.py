@@ -49,10 +49,10 @@ for ds in CV:
         for ax, k in [(axs[1], "cov_0"), (axs[2], "cov_30"), (axs[3], "hw_0")]:
             ax.errorbar(r[k], yy, xerr=[[r[k] - r[k + "_lo"]], [r[k + "_hi"] - r[k]]], fmt=DS_M[ds], color=DS_C[ds], ms=4, lw=1.1, capsize=0,
                         mec="white", mew=0.5, zorder=3)
-axs[0].axvline(0, color=C["ink"], lw=0.8); axs[0].set_xlim(-2.6, 8.2); axs[0].set_xticks([-2, 0, 2, 4, 6, 8])
+axs[0].axvline(0, color=C["ink"], lw=0.8); axs[0].set_xlim(-2.6, 8.8); axs[0].set_xticks([-2, 0, 2, 4, 6, 8])
 axs[0].set_xlabel("Δ median |error| vs CBP\nat the event [K]  (>0: worse)")
-for ax, t in [(axs[1], "at the event"), (axs[2], "after 30 min")]:
-    ax.axvline(0.90, color=C["muted"], lw=0.8, ls=(0, (4, 2))); ax.set_xlim(0.2, 1.03); ax.set_xlabel(f"Coverage of 90 % band\n{t}"); ax.set_xticks([0.25, 0.5, 0.75, 0.9, 1.0]); ax.set_xticklabels(["0.25", "0.50", "0.75", "0.90", "1"])
+for ax, t, lab in [(axs[1], "at the event", "90 % band"), (axs[2], "after 30 min", "±1.645σ band")]:
+    ax.axvline(0.90, color=C["muted"], lw=0.8, ls=(0, (4, 2))); ax.set_xlim(0.2, 1.03); ax.set_xlabel(f"Coverage of {lab}\n{t}"); ax.set_xticks([0.25, 0.5, 0.75, 0.9, 1.0]); ax.set_xticklabels(["0.25", "0.50", "0.75", "0.90", "1"])
 axs[0].set_yticks([y[m] for m in ROWS]); axs[0].set_yticklabels([LABEL[m] for m in ROWS]); axs[0].set_ylim(-0.6, len(ROWS) - 0.4)
 axs[0].get_yticklabels()[-1].set_fontweight("bold")
 axs[3].set_xlabel("Band half-width\nat the event [K]"); axs[3].set_xlim(0, 52)

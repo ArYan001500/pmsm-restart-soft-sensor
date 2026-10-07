@@ -70,14 +70,15 @@ def main():
         # strict split of fitting and calibration units: cross-validation and shift test (Table 9, Fig. 4)
         run([["scripts/run_cv5_strictsplit.py", "--dataset", ds] for ds in ["paderborn", "induction"]]
             + [["scripts/run_shift_strict.py", "--dataset", ds, "--group", g] for ds in ["paderborn", "induction"] for g in ["high", "low"]]
-            + [["scripts/run_cv5_groupconf.py", "--dataset", "paderborn"]],
+            + [["scripts/run_cv5_groupconf.py", "--dataset", "paderborn"]]
+            + [["scripts/run_cv5_causal_im.py", "--dataset", "induction"]],
             a.parallel)
         if a.sensitivity:
             run([["scripts/run_cv5_sensitivity.py", "--dataset", ds, "--tag", tag] + extra for ds in ["paderborn", "induction"]
                  for tag, extra in SENS]
                 + [["scripts/run_cv5_sensitivity.py", "--dataset", "paderborn", "--tag", tag] + extra for tag, extra in SENS_FILTER], a.parallel)
         run([["scripts/analysis/cluster_bootstrap.py"], ["scripts/analysis/runtime_and_data_stats.py"],
-             ["scripts/analysis/liang_sanity_synthetic.py"], ["scripts/analysis/analysis_shift_ewma.py"], ["scripts/analysis/analysis_strict_split.py"], ["scripts/analysis/analysis_naive_band.py"], ["scripts/analysis/analysis_robustness.py"]], False)
+             ["scripts/analysis/liang_sanity_synthetic.py"], ["scripts/analysis/analysis_shift_ewma.py"], ["scripts/analysis/analysis_strict_split.py"], ["scripts/analysis/analysis_naive_band.py"], ["scripts/analysis/analysis_robustness.py"], ["scripts/analysis/analysis_causal_inputs.py"]], False)
     if a.only != "experiments":
         figs = ["fig_overview", "fig_results", "fig_ablation", "fig_identifiability", "fig_derating", "fig_strict", "fig_graphical_abstract", "make_tables"]
         if a.sensitivity or any((ROOT / "outputs/runs").glob("*_cv5_sens_*")):
