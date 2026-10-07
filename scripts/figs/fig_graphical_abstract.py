@@ -15,7 +15,7 @@ BLUE, ORNG, INK, MUT, RED = C["CBP"], C["naive_KF"], C["ink"], C["muted"], "#C03
 def card(x, w, fc): bg.add_patch(FancyBboxPatch((x, 2), w, 46, boxstyle="round,pad=0,rounding_size=2", fc=fc, ec="none", zorder=0))
 card(1, 36, "#F6F6F4"); card(40, 44, "#EEF4FA"); card(87, 42, "#F1F8F4")
 # 1 problem
-bg.text(19, 45, "Controller reset", ha="center", fontsize=8, fontweight="bold", color=INK)
+bg.text(19, 45, "Estimator reset", ha="center", fontsize=8, fontweight="bold", color=INK)
 bg.text(19, 40.8, "estimator memory erased", ha="center", fontsize=6.3, color=MUT)
 cx, cy = 19, 24
 bg.add_patch(Circle((cx, cy), 11, fc="#D9D9D6", ec="#7A7A7A", lw=0.6))
@@ -46,7 +46,7 @@ ax.set_xlabel("min after reset", fontsize=5.8, labelpad=0); ax.set_facecolor("wh
 ax.text(29, 100, "naive", color=ORNG, fontsize=5.8, ha="right", va="top", fontweight="bold")
 ax.text(29, 44, "proposed + band", color=BLUE, fontsize=5.8, ha="right", fontweight="bold")
 ax.text(16, 81, "measured", color=INK, fontsize=5.8, ha="left", fontweight="bold")
-bg.text(108, 8.4, "PMSM error at reset 11.9 → 5.1 K", ha="center", fontsize=6.1, color=INK, fontweight="bold")
-bg.text(108, 4.6, "covered: 26/32 PMSM resets, 54/55 IM starts", ha="center", fontsize=5.6, color=INK)
+bg.text(108, 9.6, "median PMSM error at reset 11.9 → 5.1 K", ha="center", fontsize=5.8, color=INK, fontweight="bold")
+bg.text(108, 3.6, "locked tests: 26/32 PMSM resets (3 profiles),\n54/55 induction-motor starts covered", ha="center", fontsize=5.7, color=INK)
 fig.savefig(OUT / "graphical_abstract.pdf"); fig.savefig(OUT / "graphical_abstract.png", dpi=300); fig.savefig(OUT / "graphical_abstract.tiff", dpi=300)
 print("ok")

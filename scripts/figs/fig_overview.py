@@ -82,7 +82,7 @@ bg.text(82, 27.4, "score s = |PM − μ(x)| / (1 + ν(x)) on real training\neven
 bg.text(82, 21.6, "half-width  h(x) = $q_{0.9}$ · (1 + ν(x))", ha="center", va="center", fontsize=5.9, fontweight="bold", zorder=4)
 arrow(67, 45, 67, 36); arrow(93, 45, 93, 36)
 box(109, 19, 18, 17, "Split process\nnoise Q\n\nq rule: smallest q\nwith train coverage\n≥ 0.88", fs=5.4)
-bg.text(92, 9.5, "Measured PM temperatures identify the network and calibrate the band;\nthey are never used to train the prior", ha="center", fontsize=5.7, color=MUT, style="italic")
+bg.text(92, 9.5, "Measured PM temperatures identify the network and calibrate the band;\nthey are not used as regression targets of the prior", ha="center", fontsize=5.7, color=MUT, style="italic")
 bg.add_patch(Rectangle((60, 8.2), 64, 0.01, color="none"))
 
 # ---------- (c) online

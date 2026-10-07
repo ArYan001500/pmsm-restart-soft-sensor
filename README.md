@@ -73,8 +73,10 @@ the newest matching run.
 | Table 9 second row (one calibration event per profile) | `scripts/run_cv5_groupconf.py --dataset paderborn` | `outputs/runs/*_cv5_groupconf_*` |
 | Calibrated naive band (Sections 5.2, 5.7) | `scripts/analysis/analysis_naive_band.py` | `outputs/analysis_naive_band/` |
 | Fig. 5 (twin snapshots) | `scripts/run_matched_pairs_identifiability.py` | `outputs/runs/*_matched_pairs_*` |
-| Fig. 6 (derating) | `scripts/run_derating_sim.py` | `outputs/runs/*_derating_sim_*` |
+| Fig. 6 (derating, incl. the naive filter with a calibrated band) | `scripts/run_derating_sim.py` | `outputs/runs/*_derating_sim_*` |
 | Fig. 7 (sensitivity) | `scripts/run_cv5_sensitivity.py --dataset ... --tag ...` | `outputs/runs/*_cv5_sens_*` |
+| Sensitivity to the filter settings, PMSM (Section 5.10) | `scripts/run_cv5_sensitivity.py --dataset paderborn --tag ... --sigma-meas/--q-stator/--q-target ...` | `outputs/runs/*_cv5_sens_*` |
+| Profile-balanced errors, common 30-min cohort, Euler stability (Sections 4.4, 5.2) | `scripts/analysis/analysis_robustness.py` | `outputs/analysis_robustness/` |
 | Bootstrap intervals quoted in the text | `scripts/analysis/cluster_bootstrap.py` | `outputs/analysis/cluster_bootstrap_ci.csv` |
 | Data statistics and run times | `scripts/analysis/runtime_and_data_stats.py` | `outputs/analysis/runtime_and_data_stats.json` |
 | Synthetic check of the Liang-type inversion (Section 4.3) | `scripts/analysis/liang_sanity_synthetic.py` (uses `scripts/run_liang_comparison.py`) | `outputs/analysis/liang_sanity_synthetic.json` |
@@ -92,7 +94,12 @@ which `reproduce_all.py` creates with `scripts/prepare_induction_metadata.py`.
 * `src/pmsm_softsense/realdata.py` refuses to load the PMSM test profiles unless the caller asks for the final
   evaluation and `data/manifests/FREEZE_FINAL_EVALUATION.json` exists. That file was written before the test data were
   first loaded; it records the SHA-256 hashes of the frozen recipe (`docs/FREEZE_RECIPE.md`), the experiment scripts and
-  the split manifest, which are byte-identical to the files in this repository.
+  the split manifest, which are byte-identical to the files in this repository. The manifest lists the recipe under
+  its original working path `reports/paper_prep/FREEZE_RECIPE_v1.md`; in this repository the same file (same hash) is
+  `docs/FREEZE_RECIPE.md`.
+  Because these files are hash-locked, their comments were not edited afterwards; for example, the docstring of
+  `scripts/run_locked_test.py` still mentions the start prior of an earlier recipe version, which the final recipe
+  keeps only as ablation A8.
   To keep these hashes valid, the comments of the frozen files are unchanged; in them, the internal label
   `UI-009` denotes the novelty-scaled conformal calibration described in the paper.
 * `scripts/run_shift_test.py`, `scripts/run_ewma_baseline.py`, `scripts/run_cv5_strictsplit.py`, `scripts/run_shift_strict.py`, `scripts/run_cv5_groupconf.py`

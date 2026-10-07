@@ -1,5 +1,5 @@
 """SENSITIVITY of recipe v2 (CV only, test never touched): same code as run_cv5_ablation_v2.py, one setting overridden
-per run (--gap-max, --knn-k, --alpha, --q-target); only CBP and naive_KF are evaluated.
+per run (--gap-max, --knn-k, --alpha, --q-target, --sigma-meas, --q-stator); only CBP and naive_KF are evaluated.
 --- original v2 docstring ---
 v2 (2026-10-06, after v1 CV): event-matched calibration made generic.  Every calibrated variant uses the SAME
 sim-trained prior for all events; its conformal quantile is computed on events of the same type: session starts ->
@@ -43,10 +43,11 @@ ap = argparse.ArgumentParser(); ap.add_argument("--dataset", required=True, choi
 ap.add_argument("--oe-epochs", type=int, default=15)
 ap.add_argument("--gap-max", type=float, default=120); ap.add_argument("--knn-k", type=int, default=20)
 ap.add_argument("--alpha", type=float, default=0.10); ap.add_argument("--q-target", type=float, default=0.88); ap.add_argument("--tag", required=True)
+ap.add_argument("--sigma-meas", type=float, default=0.3); ap.add_argument("--q-stator", type=float, default=8.0)
 args = ap.parse_args()
 CFG = {"dataset": args.dataset, "seed": 20261006, "oe_epochs": args.oe_epochs, "n_orders": 3, "gap_min_max": args.gap_max,
-       "record_every": 60, "alpha": args.alpha, "knn_k": args.knn_k, "eval_every_min": 15, "horizon_min": 31, "sigma_meas": 0.3,
-       "q_stator": 8.0, "q_grid": [0.5, 2, 8, 32, 128], "q_cov_target": args.q_target, "tag": args.tag, "times_min": [0, 2, 4, 5, 10, 20, 30],
+       "record_every": 60, "alpha": args.alpha, "knn_k": args.knn_k, "eval_every_min": 15, "horizon_min": 31, "sigma_meas": args.sigma_meas,
+       "q_stator": args.q_stator, "q_grid": [0.5, 2, 8, 32, 128], "q_cov_target": args.q_target, "tag": args.tag, "times_min": [0, 2, 4, 5, 10, 20, 30],
        "liang_tp_s": 10.0, "liang_window_min": 4,
        "gbr": {"max_iter": 300, "learning_rate": 0.05, "max_leaf_nodes": 31, "min_samples_leaf": 40}}
 rng = np.random.default_rng(CFG["seed"])

@@ -19,6 +19,9 @@ ROOT = Path(__file__).resolve().parent
 PY = sys.executable
 SENS = [("gap60", ["--gap-max", "60"]), ("gap240", ["--gap-max", "240"]), ("k10", ["--knn-k", "10"]), ("k40", ["--knn-k", "40"]),
         ("a20", ["--alpha", "0.20"]), ("a05", ["--alpha", "0.05"])]
+# filter settings, PMSM only (Section 5.10)
+SENS_FILTER = [("sm01", ["--sigma-meas", "0.1"]), ("sm05", ["--sigma-meas", "0.5"]), ("qs4", ["--q-stator", "4"]),
+               ("qs16", ["--q-stator", "16"]), ("qt85", ["--q-target", "0.85"]), ("qt90", ["--q-target", "0.90"])]
 
 
 def run(group, parallel):
@@ -71,9 +74,10 @@ def main():
             a.parallel)
         if a.sensitivity:
             run([["scripts/run_cv5_sensitivity.py", "--dataset", ds, "--tag", tag] + extra for ds in ["paderborn", "induction"]
-                 for tag, extra in SENS], a.parallel)
+                 for tag, extra in SENS]
+                + [["scripts/run_cv5_sensitivity.py", "--dataset", "paderborn", "--tag", tag] + extra for tag, extra in SENS_FILTER], a.parallel)
         run([["scripts/analysis/cluster_bootstrap.py"], ["scripts/analysis/runtime_and_data_stats.py"],
-             ["scripts/analysis/liang_sanity_synthetic.py"], ["scripts/analysis/analysis_shift_ewma.py"], ["scripts/analysis/analysis_strict_split.py"], ["scripts/analysis/analysis_naive_band.py"]], False)
+             ["scripts/analysis/liang_sanity_synthetic.py"], ["scripts/analysis/analysis_shift_ewma.py"], ["scripts/analysis/analysis_strict_split.py"], ["scripts/analysis/analysis_naive_band.py"], ["scripts/analysis/analysis_robustness.py"]], False)
     if a.only != "experiments":
         figs = ["fig_overview", "fig_results", "fig_ablation", "fig_identifiability", "fig_derating", "fig_strict", "fig_graphical_abstract", "make_tables"]
         if a.sensitivity or any((ROOT / "outputs/runs").glob("*_cv5_sens_*")):

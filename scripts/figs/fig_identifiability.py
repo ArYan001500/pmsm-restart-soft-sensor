@@ -22,7 +22,7 @@ for key, col, name in [("A", "#0072B2", "Profile %d" % J["A"]["pid"]), ("B", "#D
     ax.text(0.6, t.pm.values[r] + (3.5 if key == "B" else -6.5), f"{name}: PM {t.pm.values[r]:.0f} °C", fontsize=6.6, color=col, fontweight="bold")
 ax.axvline(0, color=C["ink"], lw=0.8, ls=(0, (2, 2)))
 yA = (J["A"]["Tw"] + J["B"]["Tw"]) / 2
-ax.text(0.2, 97, "matched instant: winding, coolant, ambient,\ncurrent, voltage, speed all equal", fontsize=6.0, color=C["ink"], va="top")
+ax.text(0.2, 97, "matched instant: winding, coolant, ambient,\ncurrent, voltage, speed within tolerance", fontsize=6.0, color=C["ink"], va="top")
 ax.annotate("", xy=(-0.6, J["B"]["pm"]), xytext=(-0.6, J["A"]["pm"]), arrowprops=dict(arrowstyle="<->", lw=1.0, color=C["ink"]))
 ax.text(-0.9, (J["A"]["pm"] + J["B"]["pm"]) / 2, f"{J['B']['pm'] - J['A']['pm']:.0f} K\nhidden\ndifference", ha="right", va="center", fontsize=6.4, fontweight="bold")
 ax.set_xlabel("Time relative to the matched instant [min]"); ax.set_ylabel("Temperature [°C]"); ax.set_xlim(-7, 15); ax.set_ylim(18, 98)

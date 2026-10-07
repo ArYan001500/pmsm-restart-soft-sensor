@@ -6,6 +6,8 @@ Control: every 10 s choose the largest torque factor f in {1, .75, .5, .25, 0} (
          such that the estimator's predicted PM upper bound (mean + 1.645 sigma) over the next 60 s stays <= T_lim.
 Estimators (same OE-LPTN Kalman filter, winding-only S1 and 3-sensor S3):
          naive_KF  (PM = winding, P0 = 30^2), CBP_cal (label-free prior + novelty-scaled conformal band, q_pm x2),
+         naive_conf (PM = winding, rotor P0 from a split-conformal quantile of |winding - PM| on the same calibration
+                    events as CBP: training half B, every 5 min; an uncertainty-matched comparator),
          oracle    (true plant PM at reset, tiny P0; not available online).
 Research threshold T_lim is a study choice (not an OEM value): two levels.
 Metrics over 30 min after each reset: delivered torque fraction (mean f), violation degree-seconds (plant PM above T_lim).
@@ -71,6 +73,9 @@ for sc, sp in SCEN.items():
         for r in range(0, len(o) - 600, int(CFG["calib_every_min"] * 60 / TS)):
             mu, nov = pri(np.concatenate([Y[r, m], ctx(F, r)])); scB.append(abs(mu[0] - Y[r, 0]) / (1 + nov))
     PRI[sc] = (pri, Csim, cq(scB, CFG["alpha"]))
+Q_NAIVE = cq([abs(cache[p][2][r, 3] - cache[p][2][r, 0]) for p in TRAIN if p in B_ids
+              for r in range(0, len(cache[p][0]) - 600, int(CFG["calib_every_min"] * 60 / TS))], CFG["alpha"])
+print("naive conformal half-width", round(Q_NAIVE, 2), flush=True)
 
 def scaled(F, k, f):
     return {"wn": F["wn"], "us2": F["us2"], "bnd": F["bnd"], "is2": F["is2"] * f * f}
@@ -84,6 +89,9 @@ def episode(pid, r, sc, method, T_lim):
     if method == "naive_KF":
         x[h] = Y[r, 3]
         for i in h: P[i, i] = (30.0 if i == 0 else 15.0) ** 2
+    elif method == "naive_conf":
+        x[h] = Y[r, 3]
+        for i in h: P[i, i] = (Q_NAIVE / 1.645) ** 2 if i == 0 else 15.0 ** 2
     elif method == "CBP_cal":
         pri, Csim, qn = PRI[sc]
         mu, nov = pri(np.concatenate([Y[r, m], ctx(F, r)])); x[h] = mu
@@ -119,7 +127,7 @@ for T_lim in CFG["T_lim_C"]:
         o, F, Y = cache[pid]
         for r in range(0, len(o) - int(5 * 60 / TS), int(CFG["eval_reset_every_min"] * 60 / TS)):
             for sc in SCEN:
-                for meth in ["naive_KF", "CBP_cal", "oracle"]:
+                for meth in ["naive_KF", "naive_conf", "CBP_cal", "oracle"]:
                     rec = episode(pid, r, sc, meth, T_lim)
                     rec.update({"T_lim": T_lim, "pid": pid, "r": r, "event": "start" if r == 0 else "reset", "scenario": sc, "method": meth})
                     rows.append(rec)
@@ -137,7 +145,7 @@ for (tl, sc, mth), g in R[R.event == "reset"].groupby(["T_lim", "scenario", "met
                                   "torque_frac_30min_mean": round(float(g.torque_frac_30min.mean()), 3),
                                   "episodes_with_violation": int((g.viol_degsec > 0).sum()),
                                   "viol_degsec_total": round(float(g.viol_degsec.sum()), 1)}
-meta = {"runtime_s": time.time() - t0, "lptn_run": str(LPTN_RUN), "python": sys.version, "platform": platform.platform(),
+meta = {"naive_conformal_halfwidth_K": Q_NAIVE, "runtime_s": time.time() - t0, "lptn_run": str(LPTN_RUN), "python": sys.version, "platform": platform.platform(),
         "manifest_sha256": hashlib.sha256(realdata.MANIFEST.read_bytes()).hexdigest(), "locked_G_loaded": False}
 (RUN / "summary.json").write_text(json.dumps({"meta": meta, "summary": S}, indent=1))
 (RUN / "completion.json").write_text(json.dumps({"status": "COMPLETED"}))
