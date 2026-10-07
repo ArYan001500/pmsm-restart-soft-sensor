@@ -62,25 +62,25 @@ the newest matching run.
 | Paper item | Script | Output |
 |---|---|---|
 | Thermal network, Fig. 1 example | `scripts/fit_lptn_real.py`, `scripts/make_fig_example_reset.py` | `outputs/runs/*_lptn_real_baseline_*` |
-| Table 5, Figs. 2 and 3 (cross-validation, ablations) | `scripts/run_cv5_ablation_v2.py --dataset {paderborn,induction}` | `outputs/runs/*_cv5_ablation_v2_*` |
-| Table 7 (locked test) | `scripts/run_locked_test.py --dataset {paderborn,induction}` | `outputs/runs/*_LOCKED_TEST_*` |
-| Table 8 (withheld speed ranges) | `scripts/run_shift_test.py --dataset {paderborn,induction} --group {high,low}` | `outputs/runs/*_shift_*` |
-| Table 6 (data-driven EWMA estimators) | `scripts/run_ewma_baseline.py --dataset {paderborn,induction} --mode {cv,test}` | `outputs/runs/*_ewma_baseline_*` |
-| Tables 6 and 8, horizon counts, per-profile coverage | `scripts/analysis/analysis_shift_ewma.py` | `outputs/analysis_shift_ewma/` |
-| Table 9, Fig. 4a,b (strict split of fitting and calibration units) | `scripts/run_cv5_strictsplit.py --dataset ...`, `scripts/run_shift_strict.py --dataset ... --group ...` | `outputs/runs/*_cv5_strictsplit_*`, `outputs/runs/*_shift_strict_*` |
-| Table 6 warm-start rows, Fig. 4c | `scripts/run_ewma_baseline.py ... --pad current` | `outputs/runs/*_ewma_baseline_*_warm_*` |
-| Table 9 and the warm-start comparison | `scripts/analysis/analysis_strict_split.py` | `outputs/analysis_strict_split/` |
-| Table 9 second row (one calibration event per profile) | `scripts/run_cv5_groupconf.py --dataset paderborn` | `outputs/runs/*_cv5_groupconf_*` |
-| Induction-motor inputs available at each sample (Section 4.1) | `scripts/run_cv5_causal_im.py --dataset induction`, then `scripts/analysis/analysis_causal_inputs.py` | `outputs/runs/*_cv5_causal_induction_*`, `outputs/analysis_causal_inputs/` |
-| Calibrated naive band (Sections 5.2, 5.7) | `scripts/analysis/analysis_naive_band.py` | `outputs/analysis_naive_band/` |
+| Table V, Figs. 2 and 3 (cross-validation, ablations) | `scripts/run_cv5_ablation_v2.py --dataset {paderborn,induction}` | `outputs/runs/*_cv5_ablation_v2_*` |
+| Table VII (locked test) | `scripts/run_locked_test.py --dataset {paderborn,induction}` | `outputs/runs/*_LOCKED_TEST_*` |
+| Table VIII (withheld speed ranges) | `scripts/run_shift_test.py --dataset {paderborn,induction} --group {high,low}` | `outputs/runs/*_shift_*` |
+| Table VI (data-driven EWMA estimators) | `scripts/run_ewma_baseline.py --dataset {paderborn,induction} --mode {cv,test}` | `outputs/runs/*_ewma_baseline_*` |
+| Tables VI and VIII, horizon counts, per-profile coverage | `scripts/analysis/analysis_shift_ewma.py` | `outputs/analysis_shift_ewma/` |
+| Table IX, Fig. 4a,b (strict split of fitting and calibration units) | `scripts/run_cv5_strictsplit.py --dataset ...`, `scripts/run_shift_strict.py --dataset ... --group ...` | `outputs/runs/*_cv5_strictsplit_*`, `outputs/runs/*_shift_strict_*` |
+| Table VI warm-start rows, Fig. 4c | `scripts/run_ewma_baseline.py ... --pad current` | `outputs/runs/*_ewma_baseline_*_warm_*` |
+| Table IX and the warm-start comparison | `scripts/analysis/analysis_strict_split.py` | `outputs/analysis_strict_split/` |
+| Table IX second row (one calibration event per profile) | `scripts/run_cv5_groupconf.py --dataset paderborn` | `outputs/runs/*_cv5_groupconf_*` |
+| Induction-motor inputs available at each sample (Section IV-A) | `scripts/run_cv5_causal_im.py --dataset induction`, then `scripts/analysis/analysis_causal_inputs.py` | `outputs/runs/*_cv5_causal_induction_*`, `outputs/analysis_causal_inputs/` |
+| Calibrated naive band (Sections V-B, V-G) | `scripts/analysis/analysis_naive_band.py` | `outputs/analysis_naive_band/` |
 | Fig. 5 (twin snapshots) | `scripts/run_matched_pairs_identifiability.py` | `outputs/runs/*_matched_pairs_*` |
 | Fig. 6 (derating, incl. the naive filter with a calibrated band) | `scripts/run_derating_sim.py` | `outputs/runs/*_derating_sim_*` |
 | Fig. 7 (sensitivity) | `scripts/run_cv5_sensitivity.py --dataset ... --tag ...` | `outputs/runs/*_cv5_sens_*` |
-| Sensitivity to the filter settings, PMSM (Section 5.10) | `scripts/run_cv5_sensitivity.py --dataset paderborn --tag ... --sigma-meas/--q-stator/--q-target ...` | `outputs/runs/*_cv5_sens_*` |
-| Profile-balanced errors, common 30-min cohort, Euler stability (Sections 4.4, 5.2) | `scripts/analysis/analysis_robustness.py` | `outputs/analysis_robustness/` |
+| Sensitivity to the filter settings, PMSM (Section V-J) | `scripts/run_cv5_sensitivity.py --dataset paderborn --tag ... --sigma-meas/--q-stator/--q-target ...` | `outputs/runs/*_cv5_sens_*` |
+| Profile-balanced errors, common 30-min cohort, Euler stability (Sections IV-D, V-B) | `scripts/analysis/analysis_robustness.py` | `outputs/analysis_robustness/` |
 | Bootstrap intervals quoted in the text | `scripts/analysis/cluster_bootstrap.py` | `outputs/analysis/cluster_bootstrap_ci.csv` |
 | Data statistics and run times | `scripts/analysis/runtime_and_data_stats.py` | `outputs/analysis/runtime_and_data_stats.json` |
-| Synthetic check of the Liang-type inversion (Section 4.3) | `scripts/analysis/liang_sanity_synthetic.py` (uses `scripts/run_liang_comparison.py`) | `outputs/analysis/liang_sanity_synthetic.json` |
+| Synthetic check of the Liang-type inversion (Section IV-C) | `scripts/analysis/liang_sanity_synthetic.py` (uses `scripts/run_liang_comparison.py`) | `outputs/analysis/liang_sanity_synthetic.json` |
 | Figures and tables | `scripts/figs/*.py` | `outputs/figures/`, `outputs/tables/` |
 
 All random choices use the fixed seed 20261006. The induction-motor experiments first need a per-session summary,
@@ -101,8 +101,7 @@ which `reproduce_all.py` creates with `scripts/prepare_induction_metadata.py`.
   Because these files are hash-locked, their comments were not edited afterwards; for example, the docstring of
   `scripts/run_locked_test.py` still mentions the start prior of an earlier recipe version, which the final recipe
   keeps only as ablation A8.
-  To keep these hashes valid, the comments of the frozen files are unchanged; in them, the internal label
-  `UI-009` denotes the novelty-scaled conformal calibration described in the paper.
+  In these comments the internal label `UI-009` denotes the novelty-scaled conformal calibration described in the paper.
 * `scripts/run_shift_test.py`, `scripts/run_ewma_baseline.py`, `scripts/run_cv5_strictsplit.py`, `scripts/run_shift_strict.py`, `scripts/run_cv5_groupconf.py`, `scripts/run_cv5_causal_im.py`
   and `scripts/analysis/analysis_{shift_ewma,strict_split,naive_band,causal_inputs}.py` were added after the locked test. The shift test reuses the code path of `run_cv5_ablation_v2.py` on development data only; the
   EWMA baseline is a separate estimator evaluated on the same events. Neither changes the frozen recipe.
