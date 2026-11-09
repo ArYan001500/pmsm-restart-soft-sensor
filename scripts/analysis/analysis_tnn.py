@@ -1,19 +1,21 @@
 """Additional analysis (2026-11, added during the revision, after the locked test): the thermal neural network (TNN)
-baseline of scripts/run_tnn_official.py compared with CBP on identical events, as analysis_shift_ewma.py does for the
-EWMA estimators. Uses the newest outputs/runs/*_tnn_official folder and the newest CBP runs
+baseline of scripts/run_tnn_hpo.py (default; TNN paper optimum, reported in the paper) or of
+scripts/run_tnn_official.py (--family official; example settings of the public code) compared with CBP on identical events, as analysis_shift_ewma.py does for the
+EWMA estimators. Uses the newest outputs/runs/*_tnn_hpo (or *_tnn_official) folder and the newest CBP runs
 (*_cv5_ablation_v2_paderborn_*, *_LOCKED_TEST_paderborn_*).
 Seed selection (fixed before results): per CV fold, and for the test model, the seed with the lowest training loss of
 the last epoch. Differences of medians (TNN minus CBP) with 95% cluster-bootstrap intervals over profiles (CV only).
 Also the continuous accuracy of the test model on profiles 60, 62 and 74 started from the true state (the TNN paper's
-generalisation set; the paper reports a mean squared error of 3.18 K^2 for its optimised model).
-Writes outputs/analysis_tnn/results.json."""
-import json, glob
+generalisation set; Table 3 of the TNN paper reports 2.87 K^2 for its hyperparameter optimum and 3.18 K^2 for a
+64-parameter TNN). Writes outputs/analysis_tnn/results.json (or results_official.json)."""
+import json, glob, argparse
 from pathlib import Path
 import numpy as np, pandas as pd
 
 ROOT = Path(__file__).resolve().parents[2]; R = ROOT / "outputs/runs"; OUT = ROOT / "outputs/analysis_tnn"; OUT.mkdir(parents=True, exist_ok=True)
 def latest(p): return Path(sorted(glob.glob(str(R / p)))[-1])
-RUN = latest("*_tnn_official")
+FAM = argparse.ArgumentParser(); FAM.add_argument("--family", choices=["hpo", "official"], default="hpo")
+FAM = FAM.parse_args().family; RUN = latest(f"*_tnn_{FAM}")
 rng = np.random.default_rng(20261006); B = 4000
 def ci(v): return [float(np.percentile(v, 2.5)), float(np.percentile(v, 97.5))]
 
@@ -53,8 +55,8 @@ for mode, src in [("cv", "*_cv5_ablation_v2_paderborn_*"), ("test", "*_LOCKED_TE
 for t in [t for k, t in sel.items() if k.startswith("test")]:
     cont = metas[t]["continuous"]; n = sum(v["n"] for v in cont.values())
     res["fidelity_test"] = {"per_profile": cont, "mse_all_K2_weighted": sum(v["mse_all_K2"] * v["n"] for v in cont.values()) / n,
-                            "max_abs_pm_K": max(v["max_abs_pm_K"] for v in cont.values()), "paper_mse_all_K2": 3.18, "paper_max_abs_K": 5.84}
-(OUT / "results.json").write_text(json.dumps(res, indent=1))
+                            "max_abs_pm_K": max(v["max_abs_pm_K"] for v in cont.values()), "paper_hpo_optimum_mse_K2": 2.87, "paper_hpo_optimum_max_K": 6.02, "paper_small_tnn_mse_K2": 3.18, "paper_small_tnn_max_K": 5.84}
+(OUT / ("results.json" if FAM == "hpo" else "results_official.json")).write_text(json.dumps(res, indent=1))
 for k, d in res.items():
     if "|" in k:
         for m, r in d.items():

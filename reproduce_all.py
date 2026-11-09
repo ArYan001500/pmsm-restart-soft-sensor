@@ -76,16 +76,18 @@ def main():
             + [["scripts/run_cv5_groupconf.py", "--dataset", "paderborn"]]
             + [["scripts/run_cv5_causal_im.py", "--dataset", "induction"]],
             a.parallel)
-        # thermal neural network baseline with the authors' public code (TNN rows of Table 5, Section V-C)
-        tnn_out = f"outputs/runs/{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}_tnn_official"
-        run([["scripts/run_tnn_official.py", "--mode", "cv", "--fold", str(f), "--seed", str(s), "--out", tnn_out] for s in range(3) for f in range(5)]
-            + [["scripts/run_tnn_official.py", "--mode", "test", "--seed", str(s), "--out", tnn_out] for s in range(3)], a.parallel)
+        # thermal neural network baseline with the authors' public code: hyperparameter optimum of the TNN paper
+        # (TNN rows of Table 5, Section V-C) and the example settings of the code (one sentence in Section V-C)
+        for script, fam in [("scripts/run_tnn_hpo.py", "hpo"), ("scripts/run_tnn_official.py", "official")]:
+            tnn_out = f"outputs/runs/{time.strftime('%Y%m%dT%H%M%SZ', time.gmtime())}_tnn_{fam}"
+            run([[script, "--mode", "cv", "--fold", str(f), "--seed", str(s), "--out", tnn_out] for s in range(3) for f in range(5)]
+                + [[script, "--mode", "test", "--seed", str(s), "--out", tnn_out] for s in range(3)], a.parallel)
         if a.sensitivity:
             run([["scripts/run_cv5_sensitivity.py", "--dataset", ds, "--tag", tag] + extra for ds in ["paderborn", "induction"]
                  for tag, extra in SENS]
                 + [["scripts/run_cv5_sensitivity.py", "--dataset", "paderborn", "--tag", tag] + extra for tag, extra in SENS_FILTER], a.parallel)
         run([["scripts/analysis/cluster_bootstrap.py"], ["scripts/analysis/runtime_and_data_stats.py"],
-             ["scripts/analysis/liang_sanity_synthetic.py"], ["scripts/analysis/analysis_shift_ewma.py"], ["scripts/analysis/analysis_strict_split.py"], ["scripts/analysis/analysis_naive_band.py"], ["scripts/analysis/analysis_robustness.py"], ["scripts/analysis/analysis_causal_inputs.py"], ["scripts/analysis/analysis_tnn.py"]], False)
+             ["scripts/analysis/liang_sanity_synthetic.py"], ["scripts/analysis/analysis_shift_ewma.py"], ["scripts/analysis/analysis_strict_split.py"], ["scripts/analysis/analysis_naive_band.py"], ["scripts/analysis/analysis_robustness.py"], ["scripts/analysis/analysis_causal_inputs.py"], ["scripts/analysis/analysis_tnn.py"], ["scripts/analysis/analysis_tnn.py", "--family", "official"]], False)
     if a.only != "experiments":
         figs = ["fig_overview", "fig_results", "fig_ablation", "fig_identifiability", "fig_derating", "fig_strict", "fig_graphical_abstract", "make_tables"]
         if a.sensitivity or any((ROOT / "outputs/runs").glob("*_cv5_sens_*")):

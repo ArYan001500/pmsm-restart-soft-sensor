@@ -52,7 +52,7 @@ python reproduce_all.py --parallel --sensitivity   # also the 12 sensitivity run
 Wall-clock times on the desktop CPU used for the paper (Intel, 20 logical cores): main thermal network about 25 min;
 five-fold cross-validation with all ablations 104 min (PMSM) and 82 min (induction motor); each locked test about
 60 to 100 min; identifiability, derating and the Fig. 1 example a few minutes each; sensitivity study about 2.5 h when
-the 12 runs are executed in parallel; thermal neural network baseline about 1 h with `--parallel` (18 training runs).
+the 12 runs are executed in parallel; thermal neural network baselines about 2.5 h with `--parallel` (two sets of 18 training runs).
 Without `--parallel` the steps run one after another.
 
 Every experiment writes a new time-stamped folder in `outputs/runs/` containing its configuration
@@ -67,7 +67,7 @@ the newest matching run.
 | Table VII (locked test) | `scripts/run_locked_test.py --dataset {paderborn,induction}` | `outputs/runs/*_LOCKED_TEST_*` |
 | Table VIII (withheld speed ranges) | `scripts/run_shift_test.py --dataset {paderborn,induction} --group {high,low}` | `outputs/runs/*_shift_*` |
 | Table VI (data-driven EWMA estimators) | `scripts/run_ewma_baseline.py --dataset {paderborn,induction} --mode {cv,test}` | `outputs/runs/*_ewma_baseline_*` |
-| Table V, TNN rows; Section V-C (thermal neural network, authors' public code) | `scripts/run_tnn_official.py --mode cv --fold {0..4} --seed {0,1,2} --out DIR` and `--mode test --seed {0,1,2} --out DIR`, then `scripts/analysis/analysis_tnn.py` | `outputs/runs/*_tnn_official`, `outputs/analysis_tnn/` |
+| Table V, TNN rows; Section V-C (thermal neural network, authors' public code with the hyperparameter optimum of the TNN paper) | `scripts/run_tnn_hpo.py --mode cv --fold {0..4} --seed {0,1,2} --out DIR` and `--mode test --seed {0,1,2} --out DIR`, then `scripts/analysis/analysis_tnn.py`; example settings of the code: `scripts/run_tnn_official.py` (same arguments), then `scripts/analysis/analysis_tnn.py --family official` | `outputs/runs/*_tnn_official`, `outputs/analysis_tnn/` |
 | Tables VI and VIII, horizon counts, per-profile coverage | `scripts/analysis/analysis_shift_ewma.py` | `outputs/analysis_shift_ewma/` |
 | Table IX, Fig. 4a,b (strict split of fitting and calibration units) | `scripts/run_cv5_strictsplit.py --dataset ...`, `scripts/run_shift_strict.py --dataset ... --group ...` | `outputs/runs/*_cv5_strictsplit_*`, `outputs/runs/*_shift_strict_*` |
 | Table VI warm-start rows, Fig. 4c | `scripts/run_ewma_baseline.py ... --pad current` | `outputs/runs/*_ewma_baseline_*_warm_*` |
@@ -107,8 +107,8 @@ which `reproduce_all.py` creates with `scripts/prepare_induction_metadata.py`.
 * `scripts/run_shift_test.py`, `scripts/run_ewma_baseline.py`, `scripts/run_cv5_strictsplit.py`, `scripts/run_shift_strict.py`, `scripts/run_cv5_groupconf.py`, `scripts/run_cv5_causal_im.py`
   and `scripts/analysis/analysis_{shift_ewma,strict_split,naive_band,causal_inputs}.py` were added after the locked test. The shift test reuses the code path of `run_cv5_ablation_v2.py` on development data only; the
   EWMA baseline is a separate estimator evaluated on the same events. Neither changes the frozen recipe.
-* `scripts/run_tnn_official.py` and `scripts/analysis/analysis_tnn.py` were added during the revision of the paper. They run
-  the thermal neural network of Kirchgässner et al. (2023) as a further baseline on the same folds and events; the
+* `scripts/run_tnn_hpo.py`, `scripts/run_tnn_official.py` and `scripts/analysis/analysis_tnn.py` were added during the
+  revision of the paper. They run the thermal neural network of Kirchgässner et al. (2023) as a further baseline on the same folds and events; the
   CBP recipe is unchanged.
 
 ## Repository layout
@@ -119,19 +119,21 @@ scripts/              data download, experiments, analysis, figures and tables
 docs/FREEZE_RECIPE.md the recipe as frozen before the locked test
 data/manifests/       split definition and the freeze record
 tests/                fast unit checks
-third_party/          licence of the third-party code used by scripts/run_tnn_official.py
+third_party/          licence of the third-party code used by scripts/run_tnn_hpo.py and scripts/run_tnn_official.py
 reproduce_all.py      runs everything in the order used for the paper
 ```
 
 ## Third-party code
 
-`scripts/run_tnn_official.py` contains the thermal neural network (TNN) of Kirchgässner, Wallscheid and Böcker,
+`scripts/run_tnn_official.py` and `scripts/run_tnn_hpo.py` contain the thermal neural network (TNN) of Kirchgässner, Wallscheid and Böcker,
 *Thermal neural networks: Lumped-parameter thermal modeling with state-space machine learning*, Engineering
 Applications of Artificial Intelligence 117 (2023) 105537. The model, the input features, the normalisation and the
 training loop are copied unchanged from the PyTorch notebook of the authors' repository,
 [github.com/wkirgsn/thermal-nn](https://github.com/wkirgsn/thermal-nn) (MIT licence, copyright (c) 2021 Wilhelm
 Kirchgässner; see `third_party/thermal-nn/LICENSE`). Only the data loading and the evaluation on the events of this
-study were added.
+study were added. `scripts/run_tnn_hpo.py` sets the sub-networks, the optimiser, the learning rate and the chunk length
+of truncated back-propagation to the hyperparameter optimum in Table 2 of that paper (the biased ELU activation is
+taken from the authors' repository); its training can be resumed from the checkpoint written after every epoch.
 
 ## Licence
 
