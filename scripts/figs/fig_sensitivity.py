@@ -27,7 +27,7 @@ for g, (title, lev) in enumerate(GROUPS):
     y += 0.9
 YMAX = y - 0.9
 setup()
-fig, axs = plt.subplots(1, 3, figsize=(W2, 80 * MM), sharey=True, gridspec_kw={"wspace": 0.07, "width_ratios": [1, 1.1, 1]})
+fig, axs = plt.subplots(1, 3, figsize=(155 * MM, 100 * MM), sharey=True, gridspec_kw={"wspace": 0.12, "width_ratios": [1, 1.1, 1]})
 off = {"paderborn": -0.13, "induction": 0.13}
 for ax in axs:
     ax.grid(axis="y", visible=False); ax.set_ylim(YMAX - 0.35, -1.25)
@@ -53,16 +53,16 @@ for g in range(3):
     for ds, dx in [("paderborn", 0), ("induction", 1)]:
         v = [load(ds, tag, "t10")["err_med"] for yy, tag, lab, nom, gg in rows if gg == g]
         y0 = [yy for yy, tag, lab, nom, gg in rows if gg == g]
-        axs[0].text(3.95, y0[0] + 0.45 + dx * 0.9, f"Δ {max(v) - min(v):.2f} K", ha="right", va="center", fontsize=5.8, color=DS_C[ds], fontweight="bold")
+        axs[0].text(3.95, y0[0] + 0.45 + dx * 0.9, f"Δ {max(v) - min(v):.2f} K", ha="right", va="center", fontsize=8, color=DS_C[ds], fontweight="bold")
 axs[0].set_yticks([r[0] for r in rows]); axs[0].set_yticklabels([r[2] for r in rows])
 for t in axs[0].get_yticklabels():
     if t.get_text() in ("≤ 120 min", "k = 20", "α = 0.10"): t.set_fontweight("bold"); t.set_color(C["CBP"])
-for title, yt in gtitle: axs[0].text(-0.02, yt, title, transform=axs[0].get_yaxis_transform(), ha="right", va="center", fontsize=7, fontweight="bold", color=C["ink"])
-axs[0].set_xlim(0, 4.0); axs[0].set_xlabel("Median |error| 10 min after the event [K]")
+for title, yt in gtitle: axs[0].text(-0.02, yt, title, transform=axs[0].get_yaxis_transform(), ha="right", va="center", fontsize=8.5, fontweight="bold", color=C["ink"])
+axs[0].set_xlim(0, 4.0); axs[0].set_xlabel("Median |error| 10 min\nafter the event [K]")
 axs[1].set_xlim(0.76, 1.0); axs[1].set_xticks([0.8, 0.85, 0.9, 0.95, 1.0]); axs[1].set_xticklabels(["0.80", "0.85", "0.90", "0.95", "1"]); axs[1].set_xlabel("Coverage at the event\n(black tick: nominal 1 − α)")
-axs[2].set_xlim(0, 36); axs[2].set_xticks([10, 20, 30]); axs[2].set_xlabel("Band half-width at the event [K]")
+axs[2].set_xlim(0, 36); axs[2].set_xticks([10, 20, 30]); axs[2].set_xlabel("Band half-width\nat the event [K]")
 for ax, s in zip(axs, "abc"): panel(ax, f"({s})", x=0.0, y=1.01); ax.yaxis.set_tick_params(length=0)
-axs[2].text(35, rows[1][0], "frozen\nrecipe", ha="right", va="center", fontsize=5.8, color=C["CBP"], fontweight="bold")
+axs[2].text(35, rows[1][0], "frozen\nrecipe", ha="right", va="center", fontsize=8, color=C["CBP"], fontweight="bold")
 from matplotlib.lines import Line2D
 h = [Line2D([], [], ls="-", lw=0.9, marker=DS_M[d], color=DS_C[d], mec="white", ms=5) for d in BASE]
 fig.legend(h, [DS_L[d] for d in BASE], loc="upper center", ncol=2, bbox_to_anchor=(0.56, 1.045))

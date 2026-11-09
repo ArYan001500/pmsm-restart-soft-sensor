@@ -31,7 +31,7 @@ for ds, (run, ev, _) in CV.items():
         res.append(rec)
 D = pd.DataFrame(res); D.to_csv(OUT / "fig_ablation_data.csv", index=False)
 setup()
-fig, axs = plt.subplots(1, 4, figsize=(W2, 70 * MM), sharey=True, gridspec_kw={"wspace": 0.10, "width_ratios": [1.15, 1, 1, 1]})
+fig, axs = plt.subplots(1, 4, figsize=(W2, 92 * MM), sharey=True, gridspec_kw={"wspace": 0.24, "width_ratios": [1.15, 1, 1, 1]})
 y = {m: len(ROWS) - 1 - i for i, m in enumerate(ROWS)}; off = {"paderborn": 0.17, "induction": -0.17}
 for ax in axs:
     for i, m in enumerate(ROWS):
@@ -42,7 +42,7 @@ for ds in CV:
     for _, r in g.iterrows():
         yy = y[r.m] + off[ds]
         if r.m != "CBP" and r.derr_hi - r.derr_lo < 1e-9:
-            axs[0].text(0.15, yy, "same prior", fontsize=5.6, color=C["muted"], va="center", ha="left") if ds == "paderborn" else None
+            axs[0].text(0.15, yy, "same prior", fontsize=8, color=C["muted"], va="center", ha="left") if ds == "paderborn" else None
         elif r.m != "CBP":
             axs[0].errorbar(r.derr, yy, xerr=[[r.derr - r.derr_lo], [r.derr_hi - r.derr]], fmt=DS_M[ds], color=DS_C[ds], ms=4, lw=1.1, capsize=0,
                             mec="white", mew=0.5, zorder=3)
@@ -51,14 +51,14 @@ for ds in CV:
                         mec="white", mew=0.5, zorder=3)
 axs[0].axvline(0, color=C["ink"], lw=0.8); axs[0].set_xlim(-2.6, 8.8); axs[0].set_xticks([-2, 0, 2, 4, 6, 8])
 axs[0].set_xlabel("Δ median |error| vs CBP\nat the event [K]  (>0: worse)")
-for ax, t, lab in [(axs[1], "at the event", "90 % band"), (axs[2], "after 30 min", "±1.645σ band")]:
-    ax.axvline(0.90, color=C["muted"], lw=0.8, ls=(0, (4, 2))); ax.set_xlim(0.2, 1.03); ax.set_xlabel(f"Coverage of {lab}\n{t}"); ax.set_xticks([0.25, 0.5, 0.75, 0.9, 1.0]); ax.set_xticklabels(["0.25", "0.50", "0.75", "0.90", "1"])
+for ax, t, lab in [(axs[1], "at the event", "90% band"), (axs[2], "after 30 min", "±1.645σ band")]:
+    ax.axvline(0.90, color=C["muted"], lw=0.8, ls=(0, (4, 2))); ax.set_xlim(0.2, 1.03); ax.set_xlabel(f"Coverage of {lab}\n{t}"); ax.set_xticks([0.3, 0.6, 0.9]); ax.set_xticklabels(["0.3", "0.6", "0.9"])
 axs[0].set_yticks([y[m] for m in ROWS]); axs[0].set_yticklabels([LABEL[m] for m in ROWS]); axs[0].set_ylim(-0.6, len(ROWS) - 0.4)
 axs[0].get_yticklabels()[-1].set_fontweight("bold")
 axs[3].set_xlabel("Band half-width\nat the event [K]"); axs[3].set_xlim(0, 52)
 for ax, s in zip(axs, "abcd"): panel(ax, f"({s})", x=0.0, y=1.02); ax.yaxis.set_tick_params(length=0)
 from matplotlib.lines import Line2D
 h = [Line2D([], [], ls="-", marker=DS_M[d], color=DS_C[d], mec="white", ms=5) for d in CV]
-fig.legend(h, [CV[d][2] for d in CV], loc="upper center", ncol=2, bbox_to_anchor=(0.55, 1.06))
+fig.legend(h, [CV[d][2] for d in CV], loc="upper center", ncol=2, bbox_to_anchor=(0.55, 1.03))
 save(fig, OUT / "fig_ablation_forest")
 print(D.round(3).to_string())

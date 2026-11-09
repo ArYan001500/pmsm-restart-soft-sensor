@@ -17,7 +17,7 @@ rng = np.random.default_rng(20261006)
 cases = [(70.0, "S1"), (70.0, "S3"), (85.0, "S1"), (85.0, "S3")]
 stats = {}
 setup()
-fig, ax = plt.subplots(figsize=(W1, 62 * MM))
+fig, ax = plt.subplots(figsize=(77.5 * MM, 80 * MM))
 for i, (tl, sc) in enumerate(cases):
     g = E[(E.T_lim == tl) & (E.scenario == sc)]; y = len(cases) - 1 - i
     units = g.pid.unique(); P = g.pivot_table(index=["pid", "r"], columns="method", values="torque_frac_10min")
@@ -38,9 +38,9 @@ for i, (tl, sc) in enumerate(cases):
     ax.plot(vals["CBP_cal"], y, MK["CBP"], color=C["CBP"], mec="white", mew=0.6, ms=6, zorder=3)
     ax.plot(vals["oracle"], y, MK["oracle"], color=C["oracle"], mec="white", mew=0.6, ms=5, zorder=3)
     r_ = rec["naive_conf"]
-    ax.text(vals["CBP_cal"], y + 0.22, f"{r_['gap_recovered'] * 100:.0f} % of gap", ha="center", fontsize=6.2, color=C["CBP"], fontweight="bold")
-    ax.text(vals["CBP_cal"], y - 0.36, f"+{r_['diff']:.2f} [{r_['ci'][0]:.2f}, {r_['ci'][1]:.2f}]", ha="center", fontsize=5.6, color=C["muted"])
-ax.set_yticks(range(len(cases))); ax.set_yticklabels([f"{int(tl)} °C limit\n{'winding only' if sc == 'S1' else 'three sensors'}" for tl, sc in cases][::-1])
+    ax.text(vals["CBP_cal"], y + 0.22, f"{r_['gap_recovered'] * 100:.0f}% of gap", ha="center", fontsize=8, color=C["CBP"], fontweight="bold")
+    ax.text(vals["CBP_cal"], y - 0.36, f"+{r_['diff']:.2f} [{r_['ci'][0]:.2f}, {r_['ci'][1]:.2f}]", ha="center", fontsize=8, color=C["muted"])
+ax.set_yticks(range(len(cases))); ax.set_yticklabels([f"{int(tl)}°C limit\n{'winding only' if sc == 'S1' else 'three sensors'}" for tl, sc in cases][::-1])
 ax.set_xlim(0.35, 1.03); ax.set_ylim(-0.6, len(cases) - 0.35); ax.grid(axis="y", visible=False)
 ax.set_xlabel("Mean admitted current fraction, first 10 min after reset")
 h = [Line2D([], [], ls="none", marker=MK["naive_KF"], mfc="white", mec=C["naive_KF"], mew=0.9, ms=4.6),
@@ -48,7 +48,7 @@ h = [Line2D([], [], ls="none", marker=MK["naive_KF"], mfc="white", mec=C["naive_
      Line2D([], [], ls="none", marker=MK["CBP"], color=C["CBP"], mec="white", ms=5),
      Line2D([], [], ls="none", marker=MK["oracle"], color=C["oracle"], mec="white", ms=5)]
 ax.legend(h, ["Naive KF", "Naive, calibrated band", "CBP", "Oracle"], loc="upper center", bbox_to_anchor=(0.45, 1.2), ncol=2,
-          fontsize=6.2, handletextpad=0.2, columnspacing=0.8)
+          fontsize=8, handletextpad=0.2, columnspacing=0.8)
 save(fig, OUT / "fig_derating")
 (OUT / "fig_derating_stats.json").write_text(json.dumps({"run": RUN.name, "stats": stats}, indent=1))
 print(json.dumps(stats, indent=1))
