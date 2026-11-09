@@ -1,5 +1,5 @@
 """Fig. sensitivity: one-factor changes of the frozen recipe (5-fold CV, winding sensor only S1, CBP only).
-Groups: standstill-gap maximum (60/120/240 min), novelty neighbours k (10/20/40), miscoverage alpha (0.20/0.10/0.05); the frozen
+Groups: standstill-gap maximum (60/120/240 min), novelty neighbors k (10/20/40), miscoverage alpha (0.20/0.10/0.05); the frozen
 setting (gap 120, k 20, alpha 0.10) is repeated in every group and highlighted.  Columns: median |error| 10 min after the event (whole pipeline: prior, band and filter; the error AT the event is
 unchanged by k and alpha by construction, since they only set the band); coverage at
 the event drawn as a lollipop from the nominal level 1-alpha; median band half-width at the event."""
@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[2]; R = ROOT / "outputs/runs"; OUT = FIG
 BASE = {"paderborn": latest_run("*_cv5_ablation_v2_paderborn_*"), "induction": latest_run("*_cv5_ablation_v2_induction_*")}
 EV = {"paderborn": "reset", "induction": "start"}
 GROUPS = [("Standstill gap in simulated histories", [("gap60", "≤ 60 min", 0.90), ("base", "≤ 120 min", 0.90), ("gap240", "≤ 240 min", 0.90)]),
-          ("Novelty neighbours", [("k10", "k = 10", 0.90), ("base", "k = 20", 0.90), ("k40", "k = 40", 0.90)]),
+          ("Novelty neighbors", [("k10", "k = 10", 0.90), ("base", "k = 20", 0.90), ("k40", "k = 40", 0.90)]),
           ("Conformal miscoverage", [("a20", "α = 0.20", 0.80), ("base", "α = 0.10", 0.90), ("a05", "α = 0.05", 0.95)])]
 DS_C = {"paderborn": "#0072B2", "induction": "#D55E00"}; DS_M = {"paderborn": "o", "induction": "s"}
 DS_L = {"paderborn": "PMSM, mid-run resets (64 profiles)", "induction": "Induction motor, starts (223 sessions)"}

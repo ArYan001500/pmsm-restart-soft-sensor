@@ -29,7 +29,7 @@ def ax_at(x, y, w, h):                                                       # a
     return fig.add_axes([x / FW, y / FH, w / FW, h / FH])
 
 # ---------- panel frames: (a) and (c) on top, (b) full width below
-for x, y, w, h, k, t in [(1, 80, 69, 75, "a", "(a) Estimator memory loss"), (72, 80, 104.5, 75, "c", "(c) Online: re-initialise and recover"),
+for x, y, w, h, k, t in [(1, 80, 69, 75, "a", "(a) Estimator memory loss"), (72, 80, 104.5, 75, "c", "(c) Online: re-initialize and recover"),
                          (1, 1, 175.5, 77, "b", "(b) Offline: simulation-trained restart prior")]:
     bg.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0,rounding_size=2", fc=PALE[k], ec="#D8D8D4", lw=0.6, zorder=0))
     bg.text(x + 2, y + h - 1.5, t, fontsize=9, fontweight="bold", va="top", color=INK)
